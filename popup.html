@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+  </head>
+  <body>
+    <div class="info">
+      <div class="info__success"></div>
+      <div class="info__error"></div>
+    </div>
+    <div class="code">
+      <input type="text" class="code__desc" placeholder="text function desc here"></input>
+      <textarea class="code__content" placeholder="text function here"></textarea>
+      <div class="code__opts">
+        <div class="code-opts__info">
+          <div class="code-opts-info__inner">
+            Editing: <span class="code-opts-info__name"></span>
+            <a class="code-opts-info__clear">clear</a>
+          </div>
+        </div>
+        <button class="code-opts__save">Save</button>
+      </div>
+    </div>
+    <div class="query">
+      <div class="query__search">
+        <input class="query-search__input" type="text" placeholder="text function name or desc">
+        <button class="query-search__btn">Search</button>
+      </div>
+    </div>
+    <div class="list">
+      <div class="list__sort"></div>
+      <table class="list__content">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Desc</th>
+            <th>Used</th>
+            <th>Opts</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="list__page">
+        <div class="list-page__info">
+          <span class="list-page-info__cur"></span>
+          <span>/</span>
+          <span class="list-page-info__total"></span>
+        </div>
+        <div class="list-page__opts">
+          <a class="list-page-opts__prev">prev</a>
+          <a class="list-page-opts__next">next</a>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
