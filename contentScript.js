@@ -7,6 +7,7 @@ function getFuncs (cb) {
 }
 function updateFuncs () {
   chrome.storage.local.set({funcs: funcsG});
+  chrome.runtime.sendMessage({type: 'updateFromContentScript'});
 }
 
 // inject script into webpage to get the window variable
@@ -23,6 +24,12 @@ document.addEventListener('ChromeExtensionInjectFunctions', function(e) {
   if (type === 'used') {
     funcsG[data].used++;
     updateFuncs();
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'updateFromPopup') {
+    injectFuncs();
   }
 });
 

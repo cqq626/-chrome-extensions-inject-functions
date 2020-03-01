@@ -4,7 +4,6 @@ document.addEventListener('ChromeExtensionInjectFunctions', function(e) {
     for (let i = 0; i < data.length; i++) {
       let { funcName, funcArgs, funcBody } = data[i];
       window[funcName] = genFunc(funcArgs, funcBody, i);
-      console.log(`inject ${funcName}`);
     }
   }
 });
