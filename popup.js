@@ -25,7 +25,7 @@ let Data = new Proxy({}, {
       case 'infoError':
         setInfo(value, true)
         return true;
-      case 'funcContent':
+      case 'funcOriContent':
         codeContentDOM.value = value;
         return true;
       case 'funcDesc':
@@ -43,7 +43,7 @@ let Data = new Proxy({}, {
           set: function (obj2, prop2, value2) {
             if (prop2 === 'length') {
               receiver.pageCur = 1;
-              receiver.funcContent = '';
+              receiver.funcOriContent = '';
               receiver.funcDesc = '';
               receiver.funcEditing = '';
               receiver.pageTotal = Math.ceil(value2 / receiver.pageSize) || 1;
@@ -62,12 +62,12 @@ let Data = new Proxy({}, {
         if (value) {
           codeOptsInfoNameDom.innerText = value.funcName;
           codeOptsInfoDom.style.display = 'block';
-          receiver.funcContent = value.funcContent;
+          receiver.funcOriContent = value.funcOriContent;
           receiver.funcDesc = value.funcDesc;
         } else {
           codeOptsInfoNameDom.innerText = '';
           codeOptsInfoDom.style.display = 'none';
-          receiver.funcContent = '';
+          receiver.funcOriContent = '';
           receiver.funcDesc = '';
         }
         break;
@@ -79,7 +79,7 @@ let Data = new Proxy({}, {
   },
   get: function (obj, prop) {
     switch (prop) {
-      case 'funcContent':
+      case 'funcOriContent':
         return codeContentDOM.value.trim();
       case 'funcDesc':
         return codeDescDOM.value.trim();
@@ -100,7 +100,7 @@ let nextBtnDom = document.querySelector('.list-page-opts__next');
 let listDom = document.querySelector('.list__content tbody');
 
 saveBtnDOM.onclick = function () {
-  let funcInfo = analyzeFunc(Data.funcContent);
+  let funcInfo = analyzeFunc(Data.funcOriContent);
   if (!funcInfo) {
     Data.infoError = `function parse error! please make sure it's valid function`;
     return true;
@@ -109,10 +109,11 @@ saveBtnDOM.onclick = function () {
   let newFuncItem = {
     funcName: funcInfo.funcName,
     funcDesc: Data.funcDesc,
+    funcOriContent: Data.funcOriContent,
     used: 0,
-    funcContent: Data.funcContent
+    funcArgs: funcInfo.funcArgs,
+    funcBody: funcInfo.funcBody
   };
-  newFuncItem.func = genFunc(funcInfo.funcArgs, funcInfo.funcBody, newFuncItem);;
   if (Data.funcEditing) {
     newFuncItem.used = Data.funcEditing.used;
     Data.funcs.splice(Data.funcEditing.idx, 1, newFuncItem);
@@ -175,14 +176,6 @@ function updateList () {
   }
   listDom.innerHTML = '';
   listDom.appendChild(domFragment);
-}
-
-function genFunc (funcArgs, funcBody, ctx) {
-  let func = new Function(...funcArgs, funcBody);
-  return function (args) {
-    ctx.used++;
-    return func(...args);
-  }
 }
 
 function analyzeFunc (input) {
